@@ -36,3 +36,38 @@
     transform: rotate(360deg);
   }
 }
+
+.center {
+  margin-top: 150px;
+}
+button {
+  padding: 15px 40px;
+  border-radius: 25px;
+  border: none;
+  box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.5);
+  font-size: 1.25rem;
+  text-align: center;
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: pointer;
+  outline: none;
+}
+
+button::after {
+  content: "➡";
+  color: #535252;
+  margin-left: 5px;
+  transition: margin-left 0.2s;
+}
+
+button:hover {
+  background: tomato;
+  color: #fff;
+}
+button:hover::after {
+  margin-left: 15px;
+}
+
+.desc {
+  margin-top: 40px;
+}
