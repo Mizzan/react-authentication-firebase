@@ -59,11 +59,22 @@ function App() {
       .catch((error) => console.log(error));
   };
 
+  const handleBlur = (e) => {
+    console.log(e.target.name, e.target.value);
+  };
+  const handleSubmit = () => {};
+
+  const formStyle = {
+    width: "400px",
+    margin: "0 auto",
+    marginTop: "50px",
+    paddingBottom: "50px",
+  };
   return (
     <div className="App">
       <div className="center">
         {!user.isSignIn ? (
-          <button onClick={handleSignIn}>Sign In</button>
+          <button onClick={handleSignIn}>Sign In With Google</button>
         ) : (
           <button onClick={handleSignOut}>Sign Out</button>
         )}
@@ -75,6 +86,27 @@ function App() {
           <h4>Your email: {user.email}</h4>
         </div>
       )}
+
+      <form style={formStyle} onSubmit={handleSubmit}>
+        <fieldset>
+          <input
+            onBlur={handleBlur}
+            type="email"
+            name="email"
+            placeholder="Enter your email"
+            required
+          />
+          <br />
+          <input
+            onBlur={handleBlur}
+            required
+            type="password"
+            name="password"
+            placeholder="Enter your password"
+          />
+        </fieldset>
+        <button type="submit">Lgo In with Email</button>
+      </form>
     </div>
   );
 }
