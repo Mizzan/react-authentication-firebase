@@ -11,6 +11,7 @@ function App() {
     isSignIn: false,
     name: "",
     email: "",
+    password: "",
     photo: "",
   });
 
@@ -60,16 +61,20 @@ function App() {
   };
 
   const handleBlur = (e) => {
-    console.log(e.target.name, e.target.value);
-
+    let isFormValid = true;
     if (e.target.name === "email") {
-      const isEmailValid = /\S+@\S+\.\S+/.test(e.target.value);
-      console.log(isEmailValid);
+      isFormValid = /\S+@\S+\.\S+/.test(e.target.value);
+      console.log(isFormValid);
     }
     if (e.target.name === "password") {
-      const isPasswordValid = e.target.value.length > 6;
-      const passwordHasNumber = /\d{1}/.test(e.target.value);
-      console.log(isPasswordValid && passwordHasNumber);
+      const isFormValid =
+        e.target.value.length > 6 && /\d{1}/.test(e.target.value);
+      console.log(isFormValid);
+    }
+    if (isFormValid) {
+      const newUserInfo = { ...user };
+      newUserInfo[e.target.name] = e.target.value;
+      setUser(newUserInfo);
     }
   };
   const handleSubmit = () => {};
@@ -96,9 +101,22 @@ function App() {
           <h4>Your email: {user.email}</h4>
         </div>
       )}
+      <p>Email : {user.name}</p>
+      <p>Email : {user.email}</p>
+      <p>Password : {user.password}</p>
 
       <form style={formStyle} onSubmit={handleSubmit}>
         <fieldset>
+          <input
+            onBlur={handleBlur}
+            // disabling the email type for using the regex
+            // type="email"
+            type="text"
+            name="name"
+            placeholder="Enter your name"
+            required
+          />
+          <br />
           <input
             onBlur={handleBlur}
             // disabling the email type for using the regex
