@@ -13,6 +13,8 @@ function App() {
     email: "",
     password: "",
     photo: "",
+    error: "",
+    success: false,
   });
 
   const provider = new firebase.auth.GoogleAuthProvider();
@@ -61,23 +63,42 @@ function App() {
   };
 
   const handleBlur = (e) => {
-    let isFormValid = true;
+    let isFieldValid = true;
     if (e.target.name === "email") {
-      isFormValid = /\S+@\S+\.\S+/.test(e.target.value);
-      console.log(isFormValid);
+      isFieldValid = /\S+@\S+\.\S+/.test(e.target.value);
+      console.log(isFieldValid);
     }
     if (e.target.name === "password") {
-      const isFormValid =
+      const isFieldValid =
         e.target.value.length > 6 && /\d{1}/.test(e.target.value);
-      console.log(isFormValid);
+      console.log(isFieldValid);
     }
-    if (isFormValid) {
+    if (isFieldValid) {
       const newUserInfo = { ...user };
       newUserInfo[e.target.name] = e.target.value;
       setUser(newUserInfo);
     }
   };
-  const handleSubmit = () => {};
+  const handleSubmit = (e) => {
+    if (user.email && user.password) {
+      firebase
+        .auth()
+        .createUserWithEmailAndPassword(user.email, user.password)
+        .then((res) => {
+          const newUserInfo = { ...user };
+          newUserInfo.error = "";
+          newUserInfo.success = true;
+          setUser(newUserInfo);
+        })
+        .catch((error) => {
+          const newUserInfo = { ...user };
+          newUserInfo.error = error.message;
+          newUserInfo.success = false;
+          setUser(newUserInfo);
+        });
+    }
+    e.preventDefault();
+  };
 
   const formStyle = {
     width: "400px",
@@ -101,9 +122,6 @@ function App() {
           <h4>Your email: {user.email}</h4>
         </div>
       )}
-      <p>Email : {user.name}</p>
-      <p>Email : {user.email}</p>
-      <p>Password : {user.password}</p>
 
       <form style={formStyle} onSubmit={handleSubmit}>
         <fieldset>
@@ -137,6 +155,10 @@ function App() {
         </fieldset>
         <button type="submit">Lgo In with Email</button>
       </form>
+      <p style={{ color: "red" }}>{user.error}</p>
+      {user.success && (
+        <p style={{ color: "green" }}>User created successfully.</p>
+      )}
     </div>
   );
 }
