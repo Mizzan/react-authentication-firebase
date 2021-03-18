@@ -90,6 +90,7 @@ function App() {
           newUserInfo.error = "";
           newUserInfo.success = true;
           setUser(newUserInfo);
+          updateUserName(user.name);
         })
         .catch((error) => {
           const newUserInfo = { ...user };
@@ -107,6 +108,7 @@ function App() {
           newUserInfo.error = "";
           newUserInfo.success = true;
           setUser(newUserInfo);
+          console.log("Sign in user info", res.user);
         })
         .catch((error) => {
           const newUserInfo = { ...user };
@@ -116,6 +118,24 @@ function App() {
         });
     }
     e.preventDefault();
+  };
+
+  const updateUserName = (name) => {
+    const user = firebase.auth().currentUser;
+
+    user
+      .updateProfile({
+        displayName: name,
+        photoURL: "https://example.com/jane-q-user/profile.jpg",
+      })
+      .then(function () {
+        // Update successful.
+        console.log("Update successful");
+      })
+      .catch(function (error) {
+        // An error happened.
+        console.log("An error happened", error);
+      });
   };
 
   const formStyle = {
@@ -179,7 +199,7 @@ function App() {
             placeholder="Enter your password"
           />
         </fieldset>
-        <button type="submit">Lgo In with Email</button>
+        <button type="submit">{newUser ? "Sign up" : "Lgo In"}</button>
       </form>
       <p style={{ color: "red" }}>{user.error}</p>
       {user.success && (
